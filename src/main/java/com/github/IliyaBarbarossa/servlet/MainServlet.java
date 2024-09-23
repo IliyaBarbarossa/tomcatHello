@@ -13,7 +13,7 @@ public class MainServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("text/html");
         PrintWriter printWriter = resp.getWriter();
-        printWriter.write("Hellooyin!");
+        printWriter.write("Hello!");
         printWriter.close();
     }
 }
