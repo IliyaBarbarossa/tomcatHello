@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+
+    tools {
+        jdk 'SDKMAN'
+    }
+
+    stages {
+        stage('Clone') {
+            steps {
+                checkout scmGit(branches: [[name: '*/main']],
+                                userRemoteConfigs: [[   credentialsId: 'ba896936-a39e-4a8b-804c-8e9ecb7829d9',
+                                                        url: 'git@github.com:IliyaBarbarossa/tomcatHello.git']])
+            }
+        }
+        stage ('Build') {
+            steps {
+                sh "./gradlew clean war"
+            }
+        }
+
+        stage ('Deploy') {
+            steps {
+                deploy adapters:[
+                    tomcat9(
+                        credentialsId: '1e0e6b26-c4c4-4de2-a06a-de6857090bd2',
+                        path: '',
+                        url: 'http://192.168.56.3:8085/'
+                        )
+                    ],
+                    contextPath: 'tomcatHello',
+                    war: 'build/libs/tomcatHello-1.0-SNAPSHOT.war'
+            }
+        }
+    }
+}
